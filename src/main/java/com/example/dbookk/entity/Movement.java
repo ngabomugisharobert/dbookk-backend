@@ -11,6 +11,7 @@ public class Movement {
     private int gate_id;
     private String mv_id;
 
+    private String timestamp= null;
     private String vis_name = null;
 
     private String guard_name = null;
@@ -18,16 +19,25 @@ public class Movement {
     public Movement() {
     }
 
-    public Movement(String documentId, String visitor_id, String movementType, String mv_time, int guard_id, String transportType, String vehicle_plate, int gate_id, String mv_id) {
+    public Movement(String documentId, String visitor_id, String movementType, String mv_time,String timestamp, int guard_id, String transportType, String vehicle_plate, int gate_id, String mv_id) {
         this.documentId = documentId;
         this.visitor_id = visitor_id;
-        MovementType = movementType;
+        this.MovementType = movementType;
         this.mv_time = mv_time;
         this.guard_id = guard_id;
+        this.timestamp = timestamp;
         this.transportType = transportType;
         this.vehicle_plate = vehicle_plate;
         this.gate_id = gate_id;
         this.mv_id = mv_id;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getGuard_name() {
