@@ -83,7 +83,7 @@ return movementsList.toArray(new Movement[0]);
 
                 // Create VisitorMovement objects with durations
                 for (Map.Entry<LocalDate, Duration> dateDurationEntry : visitorDateDurations.entrySet()) {
-                    Movements visitorMovement = new Movements(visitorId, dateDurationEntry.getKey().toString(), formatDuration(dateDurationEntry.getValue()),formatDuration(dateDurationEntry.getValue()),"test", "what", 0);
+                    Movements visitorMovement = new Movements(visitorId, dateDurationEntry.getKey().toString(),"","", formatDuration(dateDurationEntry.getValue()),formatDuration(dateDurationEntry.getValue()),"test", "what", 0,"","","");
                     visitorMovementsWithDurations.add(visitorMovement);
                 }
             }

@@ -45,7 +45,7 @@ public class MovementsVisitor {
 
 //            check if the first movement is a check-out
             if (i==0 && movement.get(0).getMovementType().equals("check-out")) {
-                Movements movements = new Movements(movement.get(i).getVisitor_id(),"", movement.get(i).getMv_time(), "0", movement.get(i).getVis_name(), "", 1);
+                Movements movements = new Movements(movement.get(i).getVisitor_id(),"", "", movement.get(i).getMv_time(), movement.get(i).getGate_id()+"", "0", movement.get(i).getVis_name(), "", 1, movement.get(i).getVis_type(), movement.get(i).getComment(),movement.get(i).getEditor());
                 movementWithDuration.add(movements);
                 continue;
             }
@@ -55,11 +55,11 @@ public class MovementsVisitor {
 
 //                check if those two movements are check-in
                 if (movement.get(i).getMovementType().equals("check-in")) {
-                    Movements movements = new Movements(movement.get(i).getVisitor_id(), movement.get(i).getMv_time(), "", "0", movement.get(i).getVis_name(), "", 1);
+                    Movements movements = new Movements(movement.get(i).getVisitor_id(), movement.get(i).getMv_time(),movement.get(i).getGate_id()+"","", "", "0", movement.get(i).getVis_name(), "", 1, movement.get(i).getVis_type(), movement.get(i).getComment(),movement.get(i).getEditor());
                     movementWithDuration.add(movements);
                 }
                 else if (movement.get(i).getMovementType().equals("check-out")) {
-                    Movements movements = new Movements(movement.get(i).getVisitor_id(), "", movement.get(i+1).getMv_time(), "0", movement.get(i).getVis_name(), "", 1);
+                    Movements movements = new Movements(movement.get(i).getVisitor_id(),"", "", movement.get(i+1).getMv_time(),movement.get(i+1).getGate_id()+"", "0", movement.get(i).getVis_name(), "", 1, movement.get(i).getVis_type(), movement.get(i).getComment(),movement.get(i).getEditor());
                     movementWithDuration.add(movements);
                 }
 
@@ -77,14 +77,30 @@ public class MovementsVisitor {
                     if (check_in_movementDate.equals(check_out_movementDate)) {
 //                        calculate the duration between the two movements
                         long duration = Duration.between(chInMovementTime, chOutMovementTime).toHours();
-                        Movements movements = new Movements(movement.get(i).getVisitor_id(), movement.get(i).getMv_time(),movement.get(i+1).getMv_time(), String.valueOf(duration), movement.get(i + 1).getVis_name(), "day", 0);
-                        movementWithDuration.add(movements);
+//                        check if mv_id equals 1 to know if either of the two movements have the mv_id equals 1 with string equals method
+
+                        if ((movement.get(i).getMv_id()).equals("1") || (movement.get(i + 1).getMv_id()).equals("1")) {
+                            Movements movements = new Movements(movement.get(i).getVisitor_id(), movement.get(i).getMv_time(),movement.get(i).getGate_id()+"",movement.get(i+1).getMv_time(),movement.get(i+1).getGate_id()+"", String.valueOf(duration), movement.get(i + 1).getVis_name(), "day", 2, movement.get(i).getVis_type(), movement.get(i).getComment(),movement.get(i).getEditor());
+                            movementWithDuration.add(movements);
+                        } else {
+                            Movements movements = new Movements(movement.get(i).getVisitor_id(), movement.get(i).getMv_time(),movement.get(i).getGate_id()+"", movement.get(i+1).getMv_time(),movement.get(i+1).getGate_id()+"", String.valueOf(duration), movement.get(i + 1).getVis_name(), "day", 0, movement.get(i).getVis_type(), movement.get(i).getComment(),movement.get(i).getEditor());
+                            movementWithDuration.add(movements);
+                        }
+
+//                        Movements movements = new Movements(movement.get(i).getVisitor_id(), movement.get(i).getMv_time(),movement.get(i+1).getMv_time(), String.valueOf(duration), movement.get(i + 1).getVis_name(), "day", 0);
+//                        movementWithDuration.add(movements);
                     } else {
 //                        if the check-in and check-out are not on the same day, calculate the duration between the check-in and the end of the day
                         LocalDateTime endOfDay = LocalDateTime.of(check_in_movementDate, LocalTime.MAX);
                         long duration = Duration.between(chInMovementTime, endOfDay).toHours();
-                        Movements movements = new Movements(movement.get(i).getVisitor_id(), movement.get(i).getMv_time(),movement.get(i+1).getMv_time(), String.valueOf(duration), movement.get(i + 1).getVis_name(), "night", 0);
-                        movementWithDuration.add(movements);
+                        //                        check if mv_id equals 1 to know if either of the two movements have the mv_id equals 1
+                        if (movement.get(i).getMv_id().equals("1") || movement.get(i + 1).getMv_id().equals("1")) {
+                            Movements movements = new Movements(movement.get(i).getVisitor_id(), movement.get(i).getMv_time(),movement.get(i).getGate_id()+"",movement.get(i+1).getMv_time(),movement.get(i+1).getGate_id()+"", String.valueOf(duration), movement.get(i + 1).getVis_name(), "night", 2, movement.get(i).getVis_type(), movement.get(i).getComment(),movement.get(i).getEditor());
+                            movementWithDuration.add(movements);
+                        } else {
+                            Movements movements = new Movements(movement.get(i).getVisitor_id(), movement.get(i).getMv_time(),movement.get(i).getGate_id()+"",movement.get(i+1).getMv_time(),movement.get(i+1).getGate_id()+"", String.valueOf(duration), movement.get(i + 1).getVis_name(), "night", 0, movement.get(i).getVis_type(), movement.get(i).getComment(),movement.get(i).getEditor());
+                            movementWithDuration.add(movements);
+                        }
                     }
 
                 }

@@ -7,6 +7,7 @@ package com.example.dbookk;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import java.io.IOException;
 @SpringBootApplication
 @Import(AppConfig.class)
 @RestController
+@EnableCaching
 public class DbookkApplication {
 
 

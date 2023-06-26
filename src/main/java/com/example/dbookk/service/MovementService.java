@@ -7,12 +7,11 @@ import com.example.dbookk.entity.Visitor;
 import com.example.dbookk.utils.MovementHelper;
 import com.example.dbookk.utils.MovementsVisitor;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.google.cloud.firestore.Firestore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,13 +21,27 @@ import java.util.concurrent.ExecutionException;
 public class MovementService {
 
     public List<Movements> getMovements() throws ExecutionException, InterruptedException {
-        QuerySnapshot movementDocuments = getCollection("tb_movements");
+
+//        QuerySnapshot movementDocuments = getCollection("tb_movements");
+
+        Firestore dbFirebase = FirestoreClient.getFirestore();
+        CollectionReference movementsCollection = getCollection("tb_movements", dbFirebase);
+        CollectionReference visitorsCollection = getCollection("tb_visitors", dbFirebase);
+        CollectionReference guardsCollection = getCollection("tb_guards", dbFirebase);
+
         QuerySnapshot visitorDocuments = getCollection("tb_visitors");
         QuerySnapshot guardDocuments = getCollection("tb_guards");
+//        int mov_size = movementDocuments.size();
 
+
+        ApiFuture<QuerySnapshot> querySnapshotFuture = movementsCollection.get();
+        QuerySnapshot movementDocuments = querySnapshotFuture.get();
         int mov_size = movementDocuments.size();
+
         int vis_size = visitorDocuments.size();
         int guard_size = guardDocuments.size();
+
+        System.out.println("mov_size: " + mov_size);
 
         Movement[] movements = new Movement[mov_size];
         Visitor[] visitors = new Visitor[vis_size];
@@ -36,6 +49,10 @@ public class MovementService {
 
         int i = 0;
         for (DocumentSnapshot document : movementDocuments.getDocuments()) {
+
+//        print the movements list in console
+            System.out.println("=> " +(document.toObject(Movement.class)).toString());
+
             Movement movement = document.toObject(Movement.class);
             if (movement != null) {
                 movement.setDocumentId(document.getId());
@@ -70,6 +87,7 @@ public class MovementService {
             for (int k = 0; k < vis_size; k++) {
                 if (movements[j].getVisitor_id().equals(visitors[k].getVis_id())) {
                     movements[j].setVis_name(visitors[k].getVis_first_name() + " " + visitors[k].getVis_last_name());
+                    movements[j].setVis_type(visitors[k].getVis_type());
                     movementsWithName[j] = movements[j];
                 }
             }
@@ -108,6 +126,10 @@ public class MovementService {
         ApiFuture<QuerySnapshot> future = dbFirebase.collection(collectionName).get();
         QuerySnapshot documents = future.get();
         return documents;
+    }
+
+    private CollectionReference getCollection(String collectionName, Firestore dbFirebase) {
+        return dbFirebase.collection(collectionName);
     }
 
     public List<Movements> getMovementDuration() throws ExecutionException, InterruptedException {

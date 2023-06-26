@@ -10,16 +10,30 @@ public class Movement {
     private String vehicle_plate;
     private int gate_id;
     private String mv_id;
-
     private String timestamp= null;
     private String vis_name = null;
-
+    private String vis_type = null;
     private String guard_name = null;
+    private String comment = "";
+    private String editor ="";
 
     public Movement() {
+//        set default values
+
     }
 
-    public Movement(String documentId, String visitor_id, String movementType, String mv_time,String timestamp, int guard_id, String transportType, String vehicle_plate, int gate_id, String mv_id) {
+    public Movement(String documentId, String visitor_id, String movementType, String mv_time, int guard_id, String transportType, String vehicle_plate, int gate_id, String mv_id, String vis_type, String comment, String editor) {
+        this.documentId = documentId;
+        this.visitor_id = visitor_id;
+        this.MovementType = movementType;
+        this.mv_time = mv_time;
+        this.mv_id = mv_id;
+        this.vis_type = vis_type;
+        this.comment = comment;
+        this.editor = editor;
+    }
+
+    public Movement(String documentId, String visitor_id, String movementType, String mv_time,String timestamp, int guard_id, String transportType, String vehicle_plate, int gate_id, String mv_id,String vis_type,String comment, String editor) {
         this.documentId = documentId;
         this.visitor_id = visitor_id;
         this.MovementType = movementType;
@@ -30,6 +44,10 @@ public class Movement {
         this.vehicle_plate = vehicle_plate;
         this.gate_id = gate_id;
         this.mv_id = mv_id;
+        this.vis_type = vis_type;
+        this.comment = comment;
+        this.editor = editor;
+
     }
 
     public String getTimestamp() {
@@ -123,7 +141,46 @@ public class Movement {
         return mv_id;
     }
 
+    public String getVis_type() {
+        return vis_type;
+    }
+
+    public void setVis_type(String vis_type) {
+        this.vis_type = vis_type;
+    }
+
     public void setMv_id(String mv_id) {
         this.mv_id = mv_id;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getEditor() {
+        return editor;
+    }
+
+    public void setEditor(String editor) {
+        this.editor = editor;
+    }
+
+    @Override
+    public String toString() {
+        return "Movement{" +
+                "documentId='" + documentId + '\'' +
+                ", visitor_id='" + visitor_id + '\'' +
+                ", MovementType='" + MovementType + '\'' +
+                ", mv_time='" + mv_time + '\'' +
+                ", mv_id='" + mv_id + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", vis_name='" + vis_name + '\'' +
+                ", vis_type='" + vis_type + '\'' +
+                ",comment='" + comment + '\'' +
+                '}';
     }
 }
